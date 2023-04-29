@@ -10,20 +10,25 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class Main {
 
-	public static void main(String[] args) {
-		SpringApplication.run(Main.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(Main.class, args);
+    }
 
-	@GetMapping("/")
-	public GreetResponse greet() {
-		return new GreetResponse("Hello");
-	}
+    @GetMapping("/")
+    public GreetResponse greet() {
+        return new GreetResponse("Hello");
+    }
 
-	// generated http post request
+    // generated http post request
+    @PostMapping("/greet")
+    public GreetResponse greet(GreetRequest request) {
+        return new GreetResponse("Hello " + request.name);
+    }
 
 
+    record GreetResponse(String greet) {
+    }
 
-	record GreetResponse(String greet) {}
-
-	record GreetRequest(String name) {}
+    record GreetRequest(String name) {
+    }
 }
