@@ -2,9 +2,6 @@ package com.pamir;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootApplication
@@ -15,22 +12,4 @@ public class Main {
         SpringApplication.run(Main.class, args);
     }
 
-    @GetMapping("/")
-    public GreetResponse greet(@RequestParam(value = "name", required = false) String name) {
-        String greet = name == null ? "Hello World" : "Hello " + name;
-        return new GreetResponse(greet);
-    }
-
-    // generated http post request
-    @PostMapping("/greet")
-    public GreetResponse greet(GreetRequest request) {
-        return new GreetResponse("Hello " + request.name);
-    }
-
-
-    record GreetResponse(String greet) {
-    }
-
-    record GreetRequest(String name) {
-    }
 }
