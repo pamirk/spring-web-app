@@ -24,7 +24,7 @@ public class Main {
         SpringApplication.run(Main.class, args);
     }
 
-    @RequestMapping(value = "api/v1/customers", method = RequestMethod.GET)
+    @GetMapping("api/v1/customers")
     public List<Customer> getCustomers() {
         return customers;
     }
