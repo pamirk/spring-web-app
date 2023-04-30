@@ -4,6 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootApplication
@@ -15,8 +16,9 @@ public class Main {
     }
 
     @GetMapping("/")
-    public GreetResponse greet() {
-        return new GreetResponse("Hello");
+    public GreetResponse greet(@RequestParam(value = "name", required = false) String name) {
+        String greet = name == null ? "Hello World" : "Hello " + name;
+        return new GreetResponse(greet);
     }
 
     // generated http post request
