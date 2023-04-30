@@ -3,6 +3,7 @@ package com.pamir;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -27,6 +28,14 @@ public class Main {
     @GetMapping("api/v1/customers")
     public List<Customer> getCustomers() {
         return customers;
+    }
+
+    @GetMapping("api/v1/customers/{id}")
+    public Customer getCustomer(@PathVariable("id") Integer id) {
+        return customers.stream()
+                .filter(customer -> customer.getId().equals(id))
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException("Customer with id [%s] does not exists".formatted(id)));
     }
 
     public static class Customer {
