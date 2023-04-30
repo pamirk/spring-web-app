@@ -2,6 +2,9 @@ package com.pamir;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -14,15 +17,16 @@ public class Main {
     private static List<Customer> customers;
 
     static {
-        customers = List.of(
-                new Customer("John", "john@gmail.com", 20),
-                new Customer("Jamila", "Jamila@gmail.com", 30)
-        );
+        customers = List.of(new Customer("John", "john@gmail.com", 20), new Customer("Jamila", "Jamila@gmail.com", 30));
     }
 
     public static void main(String[] args) {
-        System.out.println(customers);
         SpringApplication.run(Main.class, args);
+    }
+
+    @RequestMapping(value = "api/v1/customers", method = RequestMethod.GET)
+    public List<Customer> getCustomers() {
+        return customers;
     }
 
     public static class Customer {
@@ -78,11 +82,7 @@ public class Main {
 
         @Override
         public String toString() {
-            return "Customer{" +
-                    "name='" + name + '\'' +
-                    ", email='" + email + '\'' +
-                    ", age=" + age +
-                    '}';
+            return "Customer{" + "name='" + name + '\'' + ", email='" + email + '\'' + ", age=" + age + '}';
         }
     }
 
