@@ -7,7 +7,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class Main {
 
     public static void main(String[] args) {
-        SpringApplication.run(Main.class, args);
+        // Run the Spring Boot application
+        var ctx = SpringApplication.run(Main.class, args);
+        String[] beans = ctx.getBeanDefinitionNames();
+        // Print all the beans Spring Boot created for us
+        for (String bean : beans) {
+            System.out.println(bean);
+        }
     }
 
 }
