@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class CustomerDataAccessService implements CustomerDao {
+public class CustomerListDataAccessService implements CustomerDao {
 
     //fake database
     private static final List<Customer> customers;
