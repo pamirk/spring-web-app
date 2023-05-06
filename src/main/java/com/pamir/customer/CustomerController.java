@@ -1,8 +1,6 @@
 package com.pamir.customer;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -25,4 +23,8 @@ public class CustomerController {
         return customerService.getCustomerById(id);
     }
 
+    @PostMapping("api/v1/customers")
+    public void registerCustomer(@RequestBody CustomerRegistrationRequest customerRegistrationRequest) {
+        customerService.addCustomer(customerRegistrationRequest);
+    }
 }
