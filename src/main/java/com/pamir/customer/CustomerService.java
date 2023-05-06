@@ -23,4 +23,18 @@ public class CustomerService {
                 .orElseThrow(() -> new ResourceNotFound("Customer with id [%s] does not exists".formatted(id)));
 
     }
+
+    // git commit -m "Add customer "
+    public void addCustomer(CustomerRegistrationRequest customerRegistrationRequest) {
+        if (customerDao.existsCustomerByEmail(customerRegistrationRequest.email())) {
+            throw new IllegalStateException("Email already taken");
+        }
+        Customer customer = new Customer(
+                customerRegistrationRequest.name(),
+                customerRegistrationRequest.email(),
+                customerRegistrationRequest.age());
+
+        customerDao.insertCustomer(
+                customer);
+    }
 }
