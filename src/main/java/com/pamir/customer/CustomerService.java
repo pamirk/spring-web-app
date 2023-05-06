@@ -1,5 +1,6 @@
 package com.pamir.customer;
 
+import com.pamir.exception.DuplicateResourceException;
 import com.pamir.exception.ResourceNotFound;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -24,10 +25,9 @@ public class CustomerService {
 
     }
 
-    // git commit -m "Add customer "
     public void addCustomer(CustomerRegistrationRequest customerRegistrationRequest) {
         if (customerDao.existsCustomerByEmail(customerRegistrationRequest.email())) {
-            throw new IllegalStateException("Email already taken");
+            throw new DuplicateResourceException("Email already taken");
         }
         Customer customer = new Customer(
                 customerRegistrationRequest.name(),
