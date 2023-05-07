@@ -1,6 +1,7 @@
 package com.pamir.customer;
 
 import com.pamir.exception.DuplicateResourceException;
+import com.pamir.exception.RequestValidationnException;
 import com.pamir.exception.ResourceNotFound;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -37,9 +38,34 @@ public class CustomerService {
         customerDao.insertCustomer(
                 customer);
     }
-    
+
     public void deleteCustomerById(Integer id) {
         Customer customer = getCustomerById(id);
-        customerDao.deleteCustomerById(customer);
+        customerDao.deleteCustomer(customer);
+    }
+
+    public void updateCustomer(Integer id, CustomerRegistrationRequest updateRequest) {
+        Customer customer = getCustomerById(id);
+        boolean changed = false;
+        if (updateRequest.name() != null && !updateRequest.name().equals(customer.getName())) {
+            customer.setName(updateRequest.name());
+            changed = true;
+        }
+        if (updateRequest.age() != null && !updateRequest.age().equals(customer.getAge())) {
+            customer.setAge(updateRequest.age());
+            changed = true;
+        }
+        if (updateRequest.email() != null && !updateRequest.email().equals(customer.getEmail())) {
+            if (customerDao.existsCustomerByEmail(updateRequest.email())) {
+                throw new DuplicateResourceException("Email already taken");
+            }
+            customer.setEmail(updateRequest.email());
+            changed = true;
+        }
+
+        if (!changed) {
+            throw new RequestValidationnException("No changes provided");
+        }
+        customerDao.updateCustomer(customer);
     }
 }
