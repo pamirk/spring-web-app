@@ -33,4 +33,10 @@ public class CustomerController {
     public void registerCustomer(@RequestBody CustomerRegistrationRequest customerRegistrationRequest) {
         customerService.addCustomer(customerRegistrationRequest);
     }
+
+    @PutMapping("{id}")
+    public void updateCustomer(@PathVariable("id") Integer id,
+                               @RequestBody CustomerRegistrationRequest customerRegistrationRequest) {
+        customerService.updateCustomer(id, customerRegistrationRequest);
+    }
 }
