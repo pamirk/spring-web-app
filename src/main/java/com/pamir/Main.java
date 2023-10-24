@@ -13,13 +13,7 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) {
-        // Run the Spring Boot application
-        var ctx = SpringApplication.run(Main.class, args);
-        String[] beans = ctx.getBeanDefinitionNames();
-        // Print all the beans Spring Boot created for us
-        for (String bean : beans) {
-            System.out.println(bean);
-        }
+        SpringApplication.run(Main.class, args);
     }
 
     @Bean
@@ -29,7 +23,7 @@ public class Main {
                     new Customer(1, "John", "john@gmail.com", 20),
                     new Customer(2, "Jamila", "Jamila@gmail.com", 30));
 
-            customerRepository.saveAll(customers);
+//            customerRepository.saveAll(customers);
         };
     }
 }
