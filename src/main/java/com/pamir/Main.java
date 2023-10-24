@@ -23,7 +23,7 @@ public class Main {
                     new Customer(1, "John", "john@gmail.com", 20),
                     new Customer(2, "Jamila", "Jamila@gmail.com", 30));
 
-//            customerRepository.saveAll(customers);
+            customerRepository.saveAll(customers);
         };
     }
 }
