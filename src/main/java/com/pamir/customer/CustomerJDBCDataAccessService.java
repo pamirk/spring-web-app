@@ -1,6 +1,7 @@
 package com.pamir.customer;
 
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -17,7 +18,19 @@ public class CustomerJDBCDataAccessService implements CustomerDao {
 
     @Override
     public List<Customer> selectAllCustomers() {
-        return null;
+        String sql = """
+                     SELECT id, name, email, age
+                     FROM customer
+                     """;
+        RowMapper<Customer> customerRowMapper = (resultSet, i) -> {
+            Integer id = resultSet.getInt("id");
+            String name = resultSet.getString("name");
+            String email = resultSet.getString("email");
+            Integer age = resultSet.getInt("age");
+            return new Customer(id, name, email, age);
+        };
+        List<Customer> customers = jdbcTemplate.query(sql, customerRowMapper);
+        return customers;
     }
 
     @Override
