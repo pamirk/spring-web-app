@@ -35,8 +35,10 @@ public class CustomerJDBCDataAccessService implements CustomerDao {
                 FROM customer
                 WHERE id = ?
                 """;
-        Customer customer = jdbcTemplate.queryForObject(sql, new Object[]{id}, customerRowMapper);
-        return Optional.ofNullable(customer);
+        Optional<Customer> customer = jdbcTemplate.query(sql, customerRowMapper, id)
+                .stream()
+                .findFirst();
+        return customer;
     }
 
     @Override
