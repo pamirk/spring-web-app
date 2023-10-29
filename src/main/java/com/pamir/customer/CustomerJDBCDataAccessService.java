@@ -49,7 +49,9 @@ public class CustomerJDBCDataAccessService implements CustomerDao {
 
     @Override
     public boolean existsCustomerByEmail(String email) {
-        return false;
+        String sql = "SELECT EXISTS (SELECT 1 FROM customer WHERE email = ?)";
+        Boolean exists = jdbcTemplate.queryForObject(sql, new Object[]{email}, (resultSet, i) -> resultSet.getBoolean(1));
+        return exists;
     }
 
     @Override
