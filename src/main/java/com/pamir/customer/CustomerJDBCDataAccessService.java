@@ -48,7 +48,7 @@ public class CustomerJDBCDataAccessService implements CustomerDao {
     }
 
     @Override
-    public boolean existsCustomerByEmail(String email) {
+    public boolean existsCustomerWithEmail(String email) {
         String sql = """
                 SELECT count(id)
                 FROM customer
@@ -59,11 +59,27 @@ public class CustomerJDBCDataAccessService implements CustomerDao {
     }
 
     @Override
-    public void deleteCustomer(Customer customer) {
-
+    public boolean existsCustomerById(Integer customerId) {
+        return false;
     }
 
     @Override
+    public void deleteCustomerById(Integer customerId) {
+
+    }
+
+
+    @Override
     public void updateCustomer(Customer customer) {
+    }
+
+    @Override
+    public Optional<Customer> selectUserByEmail(String email) {
+        return Optional.empty();
+    }
+
+    @Override
+    public void updateCustomerProfileImageId(String profileImageId, Integer customerId) {
+
     }
 }
