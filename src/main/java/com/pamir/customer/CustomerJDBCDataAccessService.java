@@ -105,6 +105,12 @@ public class CustomerJDBCDataAccessService implements CustomerDao {
 
     @Override
     public void updateCustomerProfileImageId(String profileImageId, Integer customerId) {
+//        String sql = """
+//                UPDATE customer
+//                SET profile_image_id = ?
+//                WHERE id = ?
+//                """;
+//        jdbcTemplate.update(sql, profileImageId, customerId);
 
     }
 }
