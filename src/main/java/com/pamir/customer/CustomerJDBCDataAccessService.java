@@ -71,6 +71,11 @@ public class CustomerJDBCDataAccessService implements CustomerDao {
 
     @Override
     public void deleteCustomerById(Integer customerId) {
+        String sql = """
+                DELETE FROM customer
+                WHERE id = ?
+                """;
+        jdbcTemplate.update(sql, customerId);
 
     }
 
