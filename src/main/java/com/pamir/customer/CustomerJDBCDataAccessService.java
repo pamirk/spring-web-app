@@ -60,7 +60,13 @@ public class CustomerJDBCDataAccessService implements CustomerDao {
 
     @Override
     public boolean existsCustomerById(Integer customerId) {
-        return false;
+        String sql = """
+                SELECT count(id)
+                FROM customer
+                WHERE id = ?
+                """;
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, customerId);
+        return count != null && count > 0;
     }
 
     @Override
