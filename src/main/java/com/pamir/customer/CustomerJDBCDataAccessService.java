@@ -92,7 +92,15 @@ public class CustomerJDBCDataAccessService implements CustomerDao {
 
     @Override
     public Optional<Customer> selectUserByEmail(String email) {
-        return Optional.empty();
+        String sql = """
+                SELECT id, name, email, age
+                FROM customer
+                WHERE email = ?
+                """;
+        Optional<Customer> customer = jdbcTemplate.query(sql, customerRowMapper, email)
+                .stream()
+                .findFirst();
+        return customer;
     }
 
     @Override
