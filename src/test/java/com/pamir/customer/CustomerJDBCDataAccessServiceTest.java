@@ -32,7 +32,7 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
         Customer customer = new Customer(
                 FAKER.name().fullName(),
                 FAKER.internet().safeEmailAddress() + "-" + UUID.randomUUID(),
-               20);
+                20);
         underTest.insertCustomer(customer);
 
         // When
@@ -70,6 +70,18 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
             assertThat(c.getEmail()).isEqualTo(customer.getEmail());
             assertThat(c.getAge()).isEqualTo(customer.getAge());
         });
+    }
+
+    @Test
+    void willReturnEmptyWhenSelectCustomerById() {
+        // Given
+        int id = -1;
+
+        // When
+        var actual = underTest.selectCustomerById(id);
+
+        // Then
+        assertThat(actual).isEmpty();
     }
 
     @Test
