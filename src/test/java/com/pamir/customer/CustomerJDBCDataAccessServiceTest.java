@@ -101,7 +101,31 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
     }
 
     @Test
-    void existsCustomerById() {
+    void existsCustomerWithId() {
+        // Given
+        String email = FAKER.internet().safeEmailAddress() + "-" + UUID.randomUUID();
+        String name = FAKER.name().fullName();
+        int age = 20;
+
+        Customer customer = new Customer(
+                name,
+                email,
+                age);
+
+        underTest.insertCustomer(customer);
+
+        int id = underTest.selectAllCustomers()
+                .stream()
+                .filter(c -> c.getEmail().equals(email))
+                .map(Customer::getId)
+                .findFirst()
+                .orElseThrow();
+
+        // When
+        var actual = underTest.existsCustomerById(id);
+
+        // Then
+        assertThat(actual).isTrue();
     }
 
     @Test
