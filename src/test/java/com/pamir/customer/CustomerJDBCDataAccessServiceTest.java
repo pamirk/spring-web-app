@@ -15,9 +15,6 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
     private CustomerJDBCDataAccessService underTest;
     private final CustomerRowMapper customerRowMapper = new CustomerRowMapper();
 
-    CustomerJDBCDataAccessServiceTest() {
-    }
-
     @BeforeEach
     void setUp() {
         underTest = new CustomerJDBCDataAccessService(getJdbcTemplate(), customerRowMapper);
@@ -377,7 +374,25 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
 
     @Test
     void selectUserByEmail() {
+        // Given
+        String email = FAKER.internet().safeEmailAddress() + "-" + UUID.randomUUID();
+        String name = FAKER.name().fullName();
+        int age = 20;
+
+        Customer customer = new Customer(
+                name,
+                email,
+                age);
+
+        underTest.insertCustomer(customer);
+
+        // When
+        Optional<Customer> actual = underTest.selectUserByEmail(email);
+
+        // Then
+        assertThat(actual).isNotEmpty();
     }
+
 
     @Test
     void canUpdateProfileImageId() {
