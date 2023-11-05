@@ -129,6 +129,18 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
     }
 
     @Test
+    void existsCustomerWithIdWillReturnFalseWhenIdNotPresent() {
+        // Given
+        int id = -1;
+
+        // When
+        var actual = underTest.existsCustomerById(id);
+
+        // Then
+        assertThat(actual).isFalse();
+    }
+
+    @Test
     void deleteCustomerById() {
     }
 
