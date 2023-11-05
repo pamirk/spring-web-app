@@ -20,19 +20,13 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
 
     @BeforeEach
     void setUp() {
-        underTest = new CustomerJDBCDataAccessService(
-                getJdbcTemplate(),
-                customerRowMapper
-        );
+        underTest = new CustomerJDBCDataAccessService(getJdbcTemplate(), customerRowMapper);
     }
 
     @Test
     void selectAllCustomers() {
         // Given
-        Customer customer = new Customer(
-                FAKER.name().fullName(),
-                FAKER.internet().safeEmailAddress() + "-" + UUID.randomUUID(),
-                20);
+        Customer customer = new Customer(FAKER.name().fullName(), FAKER.internet().safeEmailAddress() + "-" + UUID.randomUUID(), 20);
         underTest.insertCustomer(customer);
 
         // When
@@ -46,19 +40,11 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
     void selectCustomerById() {
         // Given
         String email = FAKER.internet().safeEmailAddress() + "-" + UUID.randomUUID();
-        Customer customer = new Customer(
-                FAKER.name().fullName(),
-                email,
-                20);
+        Customer customer = new Customer(FAKER.name().fullName(), email, 20);
 
         underTest.insertCustomer(customer);
 
-        int id = underTest.selectAllCustomers()
-                .stream()
-                .filter(c -> c.getEmail().equals(email))
-                .map(Customer::getId)
-                .findFirst()
-                .orElseThrow();
+        int id = underTest.selectAllCustomers().stream().filter(c -> c.getEmail().equals(email)).map(Customer::getId).findFirst().orElseThrow();
 
         // When
         Optional<Customer> actual = underTest.selectCustomerById(id);
@@ -85,11 +71,21 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
     }
 
     @Test
-    void insertCustomer() {
-    }
-
-    @Test
     void existsCustomerWithEmail() {
+        // Given
+        String email = FAKER.internet().safeEmailAddress() + "-" + UUID.randomUUID();
+        String name = FAKER.name().fullName();
+        int age = 20;
+        Customer customer = new Customer(name, email, age);
+
+        underTest.insertCustomer(customer);
+
+        // When
+        boolean actual = underTest.existsCustomerWithEmail(email);
+
+        // Then
+        assertThat(actual).isTrue();
+
     }
 
     @Test
