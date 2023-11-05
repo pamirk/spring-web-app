@@ -60,4 +60,8 @@ public abstract class AbstractTestcontainers {
                 .build();
     }
 
+    protected static JdbcTemplate getJdbcTemplate() {
+        return new JdbcTemplate(getDataSource());
+    }
+
 }

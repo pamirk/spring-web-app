@@ -18,7 +18,7 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
     @BeforeEach
     void setUp() {
         underTest = new CustomerJDBCDataAccessService(
-                new JdbcTemplate(),
+                getJdbcTemplate(),
                 customerRowMapper
         );
     }
