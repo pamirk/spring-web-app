@@ -48,6 +48,18 @@ class CustomerRepositoryTest extends AbstractTestcontainers {
         assertThat(actual).isTrue();
     }
 
+    @Test
+    void existsCustomerByEmailFailsWhenEmailNotPresent() {
+        // Given
+        String email = FAKER.internet().safeEmailAddress() + "-" + UUID.randomUUID();
+
+        // When
+        var actual = underTest.existsCustomerByEmail(email);
+
+        // Then
+        assertThat(actual).isFalse();
+    }
+
 
     @Test
     void existsCustomerById() {
