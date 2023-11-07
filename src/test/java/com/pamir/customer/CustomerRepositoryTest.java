@@ -89,4 +89,17 @@ class CustomerRepositoryTest extends AbstractTestcontainers {
         assertThat(actual).isTrue();
     }
 
+
+    @Test
+    void existsCustomerByIdFailsWhenIdNotPresent() {
+        // Given
+        int id = -1;
+
+        // When
+        var actual = underTest.existsCustomerById(id);
+
+        // Then
+        assertThat(actual).isFalse();
+    }
+
 }
