@@ -63,6 +63,14 @@ class CustomerJPADataAccessServiceTest {
 
     @Test
     void insertCustomer() {
+        // Given
+        Customer customer = new Customer(1, "Pamir", "Pamir@gmail.com", 2);
+
+        // When
+        underTest.insertCustomer(customer);
+
+        // Then
+        verify(customerRepository).save(customer);
     }
 
     @Test
