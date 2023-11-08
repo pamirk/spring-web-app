@@ -88,7 +88,16 @@ class CustomerJPADataAccessServiceTest {
 
     @Test
     void existsCustomerById() {
+        // Given
+        int id = 1;
+
+        // When
+        underTest.existsCustomerById(id);
+
+        // Then
+        verify(customerRepository).existsCustomerById(id);
     }
+
 
     @Test
     void deleteCustomerById() {
