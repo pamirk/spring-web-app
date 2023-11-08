@@ -12,7 +12,6 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class CustomerJPADataAccessServiceTest {
@@ -114,7 +113,16 @@ class CustomerJPADataAccessServiceTest {
 
     @Test
     void updateCustomer() {
+        // Given
+        Customer customer = new Customer(1, "Pamir", "Pamir@gmail.com", 2);
+
+        // When
+        underTest.updateCustomer(customer);
+
+        // Then
+        verify(customerRepository).save(customer);
     }
+
 
     @Test
     void selectUserByEmail() {
