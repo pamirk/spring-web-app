@@ -101,7 +101,16 @@ class CustomerJPADataAccessServiceTest {
 
     @Test
     void deleteCustomerById() {
+        // Given
+        int id = 1;
+
+        // When
+        underTest.deleteCustomerById(id);
+
+        // Then
+        verify(customerRepository).deleteById(id);
     }
+
 
     @Test
     void updateCustomer() {
