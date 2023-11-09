@@ -170,4 +170,28 @@ class CustomerServiceTest {
         assertThat(capturedCustomer.getEmail()).isEqualTo(updateRequest.email());
         assertThat(capturedCustomer.getAge()).isEqualTo(updateRequest.age());
     }
+
+    @Test
+    void canUpdateOnlyCustomerName() {
+        // Given
+        int id = 10;
+        Customer customer = new Customer(id, "Pamir", "pamir@gmail.com", 23);
+        when(customerDao.selectCustomerById(id)).thenReturn(Optional.of(customer));
+
+        CustomerRegistrationRequest updateRequest = new CustomerRegistrationRequest("Pamirkhan", null, null);
+
+        // When
+        underTest.updateCustomer(id, updateRequest);
+
+        // Then
+        ArgumentCaptor<Customer> customerArgumentCaptor = ArgumentCaptor.forClass(Customer.class);
+
+        verify(customerDao).updateCustomer(customerArgumentCaptor.capture());
+        Customer capturedCustomer = customerArgumentCaptor.getValue();
+
+        assertThat(capturedCustomer.getName()).isEqualTo(updateRequest.name());
+        assertThat(capturedCustomer.getAge()).isEqualTo(customer.getAge());
+        assertThat(capturedCustomer.getEmail()).isEqualTo(customer.getEmail());
+    }
+
 }
