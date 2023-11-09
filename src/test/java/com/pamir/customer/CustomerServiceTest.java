@@ -244,5 +244,24 @@ class CustomerServiceTest {
         assertThat(capturedCustomer.getEmail()).isEqualTo(customer.getEmail());
     }
 
+    @Test
+    void willThrowWhenTryingToUpdateCustomerEmailWhenAlreadyTaken() {
+        // Given
+        int id = 10;
+        Customer customer = new Customer(id, "Pamir", "pamir@gmail.com", 23);
+        when(customerDao.selectCustomerById(id)).thenReturn(Optional.of(customer));
+
+        String newEmail = "pamir2@gmail.com";
+
+        CustomerRegistrationRequest updateRequest = new CustomerRegistrationRequest(null, newEmail, null);
+
+        when(customerDao.existsCustomerWithEmail(newEmail)).thenReturn(true);
+
+        // When
+        assertThatThrownBy(() -> underTest.updateCustomer(id, updateRequest)).isInstanceOf(DuplicateResourceException.class).hasMessage("email already taken");
+
+        // Then
+        verify(customerDao, never()).updateCustomer(any());
+    }
 
 }
