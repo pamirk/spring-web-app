@@ -131,6 +131,20 @@ class CustomerServiceTest {
     }
 
     @Test
+    void willThrowDeleteCustomerByIdNotExists() {
+        // Given
+        int id = 10;
+
+        when(customerDao.existsCustomerById(id)).thenReturn(false);
+
+        // When
+        assertThatThrownBy(() -> underTest.deleteCustomerById(id)).isInstanceOf(ResourceNotFound.class).hasMessage("customer with id [%s] not found".formatted(id));
+
+        // Then
+        verify(customerDao, never()).deleteCustomerById(id);
+    }
+
+    @Test
     void updateCustomer() {
     }
 }
