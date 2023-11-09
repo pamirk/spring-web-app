@@ -4,13 +4,15 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.mockito.Mockito;
+import com.pamir.exception.ResourceNotFound;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -54,8 +56,23 @@ class CustomerServiceTest {
     }
 
     @Test
+    void willThrowWhenGetCustomerByIdReturnEmptyOptional() {
+        // Given
+        int id = 10;
+
+        when(customerDao.selectCustomerById(id)).thenReturn(Optional.empty());
+
+        // When
+        // Then
+        assertThatThrownBy(() -> underTest.getCustomerById(id))
+                .isInstanceOf(ResourceNotFound.class)
+                .hasMessage("Customer with id [%s] does not exists".formatted(id));
+    }
+
+    @Test
     void addCustomer() {
     }
+
 
     @Test
     void deleteCustomerById() {
