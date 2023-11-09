@@ -1,5 +1,6 @@
 package com.pamir.customer;
 
+import com.pamir.exception.DuplicateResourceException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,8 +14,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class CustomerServiceTest {
@@ -76,7 +76,7 @@ class CustomerServiceTest {
 
         when(customerDao.existsCustomerWithEmail(email)).thenReturn(false);
 
-        CustomerRegistrationRequest request = new CustomerRegistrationRequest("pamir", email,  19);
+        CustomerRegistrationRequest request = new CustomerRegistrationRequest("pamir", email, 19);
 
 //        String passwordHash = "¢5554ml;f;lsd";
 
@@ -97,6 +97,22 @@ class CustomerServiceTest {
         assertThat(capturedCustomer.getEmail()).isEqualTo(request.email());
         assertThat(capturedCustomer.getAge()).isEqualTo(request.age());
 //        assertThat(capturedCustomer.getPassword()).isEqualTo(passwordHash);
+    }
+
+    @Test
+    void willThrowWhenEmailExistsWhileAddingACustomer() {
+        // Given
+        String email = "pamir@gmail.com";
+
+        when(customerDao.existsCustomerWithEmail(email)).thenReturn(true);
+
+        CustomerRegistrationRequest request = new CustomerRegistrationRequest("Pamir", email, 19);
+
+        // When
+        assertThatThrownBy(() -> underTest.addCustomer(request)).isInstanceOf(DuplicateResourceException.class).hasMessage("Email already taken");
+
+        // Then
+        verify(customerDao, never()).insertCustomer(any());
     }
 
 
