@@ -71,6 +71,32 @@ class CustomerServiceTest {
 
     @Test
     void addCustomer() {
+        // Given
+        String email = "pamir@gmail.com";
+
+        when(customerDao.existsCustomerWithEmail(email)).thenReturn(false);
+
+        CustomerRegistrationRequest request = new CustomerRegistrationRequest("pamir", email,  19);
+
+//        String passwordHash = "¢5554ml;f;lsd";
+
+//        when(passwordEncoder.encode(request.password())).thenReturn(passwordHash);
+
+        // When
+        underTest.addCustomer(request);
+
+        // Then
+        ArgumentCaptor<Customer> customerArgumentCaptor = ArgumentCaptor.forClass(Customer.class);
+
+        verify(customerDao).insertCustomer(customerArgumentCaptor.capture());
+
+        Customer capturedCustomer = customerArgumentCaptor.getValue();
+
+        assertThat(capturedCustomer.getId()).isNull();
+        assertThat(capturedCustomer.getName()).isEqualTo(request.name());
+        assertThat(capturedCustomer.getEmail()).isEqualTo(request.email());
+        assertThat(capturedCustomer.getAge()).isEqualTo(request.age());
+//        assertThat(capturedCustomer.getPassword()).isEqualTo(passwordHash);
     }
 
 
