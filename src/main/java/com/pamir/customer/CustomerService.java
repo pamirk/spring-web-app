@@ -40,7 +40,16 @@ public class CustomerService {
     }
 
     public void deleteCustomerById(Integer id) {
+        checkIfCustomerExistsOrThrow(id);
         customerDao.deleteCustomerById(id);
+    }
+
+    private void checkIfCustomerExistsOrThrow(Integer customerId) {
+        if (!customerDao.existsCustomerById(customerId)) {
+            throw new ResourceNotFound(
+                    "customer with id [%s] not found".formatted(customerId)
+            );
+        }
     }
 
     public void updateCustomer(Integer id, CustomerRegistrationRequest updateRequest) {
