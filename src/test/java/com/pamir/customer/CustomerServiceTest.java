@@ -118,6 +118,16 @@ class CustomerServiceTest {
 
     @Test
     void deleteCustomerById() {
+        // Given
+        int id = 10;
+
+        when(customerDao.existsCustomerById(id)).thenReturn(true);
+
+        // When
+        underTest.deleteCustomerById(id);
+        // Then
+        verify(customerDao).deleteCustomerById(id);
+
     }
 
     @Test
