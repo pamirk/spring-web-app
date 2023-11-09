@@ -8,6 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import com.pamir.exception.ResourceNotFound;
+import com.pamir.exception.RequestValidationException;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
@@ -263,5 +264,22 @@ class CustomerServiceTest {
         // Then
         verify(customerDao, never()).updateCustomer(any());
     }
+
+    @Test
+    void willThrowWhenCustomerUpdateHasNoChanges() {
+        // Given
+        int id = 10;
+        Customer customer = new Customer(id, "Pamir", "pamir@gmail.com", 23);
+        when(customerDao.selectCustomerById(id)).thenReturn(Optional.of(customer));
+
+        CustomerRegistrationRequest updateRequest = new CustomerRegistrationRequest(customer.getName(), customer.getEmail(), customer.getAge());
+
+        // When
+        assertThatThrownBy(() -> underTest.updateCustomer(id, updateRequest)).isInstanceOf(RequestValidationException.class).hasMessage("no data changes found");
+
+        // Then
+        verify(customerDao, never()).updateCustomer(any());
+    }
+
 
 }

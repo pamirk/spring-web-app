@@ -1,7 +1,7 @@
 package com.pamir.customer;
 
 import com.pamir.exception.DuplicateResourceException;
-import com.pamir.exception.RequestValidationnException;
+import com.pamir.exception.RequestValidationException;
 import com.pamir.exception.ResourceNotFound;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -72,7 +72,7 @@ public class CustomerService {
         }
 
         if (!changed) {
-            throw new RequestValidationnException("No changes provided");
+            throw new RequestValidationException("No changes provided");
         }
         customerDao.updateCustomer(customer);
     }
