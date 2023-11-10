@@ -93,4 +93,80 @@ public class CustomerIT {
                 .isEqualTo(expectedCustomer);
     }
 
+
+    @Test
+    void canDeleteCustomer() {
+        // create registration request
+        Faker faker = new Faker();
+        Name fakerName = faker.name();
+
+        String name = fakerName.fullName();
+        String email = fakerName.lastName() + "-" + UUID.randomUUID() + "@gmail.com";
+        int age = RANDOM.nextInt(1, 100);
+
+
+        CustomerRegistrationRequest request = new CustomerRegistrationRequest(
+                name, email, age
+        );
+
+        CustomerRegistrationRequest request2 = new CustomerRegistrationRequest(
+                name, email + ".uk", age
+        );
+
+        // send a post request to create customer 1
+        webTestClient.post()
+                .uri(CUSTOMER_PATH)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(Mono.just(request), CustomerRegistrationRequest.class)
+                .exchange()
+                .expectStatus()
+                .isOk();
+
+        // send a post request to create customer 2
+        webTestClient.post()
+                .uri(CUSTOMER_PATH)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(Mono.just(request2), CustomerRegistrationRequest.class)
+                .exchange()
+                .expectStatus()
+                .isOk();
+
+        // get all customers
+        List<Customer> allCustomers = webTestClient.get()
+                .uri(CUSTOMER_PATH)
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .expectBodyList(new ParameterizedTypeReference<Customer>() {
+                })
+                .returnResult()
+                .getResponseBody();
+
+
+        int id = allCustomers.stream()
+                .filter(customer -> customer.getEmail().equals(email))
+                .map(Customer::getId)
+                .findFirst()
+                .orElseThrow();
+
+        // customer 2 deletes customer 1
+        webTestClient.delete()
+                .uri(CUSTOMER_PATH + "/{id}", id)
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus()
+                .isOk();
+
+        // customer 2 gets customer 1 by id
+        webTestClient.get()
+                .uri(CUSTOMER_PATH + "/{id}", id)
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus()
+                .isNotFound();
+    }
+
 }
